@@ -21,7 +21,6 @@ const getGenres = async () => {
     let response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?${apiKey}`)
     let data = await response.json()
     createGenreCards(data)
-    console.log(data)
 }
 
 function createGenreCards(genres) {
@@ -78,11 +77,6 @@ function createGenreCards(genres) {
 
 getGenres()
 // -------------Generating Genres Cards End-------------
-
-// -------------Generating Genres Slider Start-------------
-
-// -------------Generating Genres Slider End-------------
-
 // -------------Generating Cards By Search Term Start-------------
 form.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -101,9 +95,9 @@ const getSearchingMovies = async (term) => {
 const getTrendingMovies = async () => {
     let response = await fetch(`https://api.themoviedb.org/3/trending/movie/day?${apiKey}&language=en-US'`)
     let data = await response.json()
+    console.log(data)
     createCards(data, 'trendingmovies')
 }
-
 getTrendingMovies()
 
 function createCards(data, container) {
@@ -116,13 +110,47 @@ function createCards(data, container) {
             movieFigure.innerHTML = `
                 <img src="https://image.tmdb.org/t/p/w185/${movie.poster_path}" alt="">
                 <figcaption>${movie.title}</figcaption>
+                <div class="stats">
+                    <span class="stars">
+                        <p>&#11088;</p>
+                        <p>${movie.vote_average}</p>
+                    </span>
+                    <p>${movie.release_date}</p>
+                </div>
             `
             section.append(movieFigure)
             createModal(movie, movieFigure)
         }
     })
 }
-// -------------Generating Trending Cards End-------------
+
+// -------------Generating Playing Cards Start-------------
+const getPlayingMovies = async () => {
+    let response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?${apiKey}&include_adult=false&language=en-US&page=1`)
+    let data = await response.json()
+    createCards(data, 'playing')
+}
+
+getPlayingMovies()
+// -------------Generating Playing Cards End-------------
+// -------------Generating Rated Cards Start-------------
+const getRatedMovies = async () => {
+    let response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?${apiKey}&include_adult=false&language=en-US&page=1`)
+    let data = await response.json()
+    createCards(data, 'rated')
+}
+
+getRatedMovies()
+// -------------Generating Rated Cards End-------------
+// -------------Generating Rated Cards Start-------------
+const getUpcomingMovies = async () => {
+    let response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?${apiKey}&include_adult=false&language=en-US&page=1`)
+    let data = await response.json()
+    createCards(data, 'upcoming')
+}
+
+getUpcomingMovies()
+// -------------Generating Rated Cards End-------------
 
 // -------------Generating Movie Info Start-------------
 function createModal(movie, container) {
@@ -138,6 +166,7 @@ function createModal(movie, container) {
 const getMovie = async (movieId, container) => {
     let response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?${apiKey}&language=en-US`)
     let data = await response.json()
+    console.log(data)
     createMovieInfo(data, container)
 }
 
@@ -161,12 +190,6 @@ function createMovieInfo(movie, container) {
     }
 }
 // -------------Generating Movie Info End-------------
-
-// const getPlayingMovies = async () => {
-//     let response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?${apiKey}&include_adult=false&language=en-US&page=1`)
-//     let data = await response.json()
-//     console.log(data)
-// }
 
 // const getMoviesByGenre = async () => {
 //     let response = await fetch(`https://api.themoviedb.org/3/discover/movie?${apiKey}&include_adult=false&language=en-US&sort_by=release_date.desc&page=1&with_genres=35,53,27
