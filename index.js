@@ -1,15 +1,84 @@
 const search = document.querySelector('#search')
 const form = document.querySelector('form')
+const searchBtn = document.querySelector('.search-btn')
+
 const apiKey = 'api_key=daf788f2ab38afabc8b5ea0ee12373da'
 
-const genresContainer = document.querySelector('.genres')
-const genreWidth = document.querySelector('.genre').offsetWidth
-document.querySelector('.prev').addEventListener('click', () => {
-    genresContainer.scrollBy({ left: -genreWidth, behavior: 'smooth' })
-})
-document.querySelector('.next').addEventListener('click', () => {
-    genresContainer.scrollBy({ left: genreWidth, behavior: 'smooth' })
-})
+searchBtn.onclick = (e) => {
+    e.stopPropagation()
+    form.style.display = 'flex'
+    search.focus()
+}
+
+document.onclick = (e) => {
+    if (e.target !== searchBtn && e.target !== form && e.target !== search) {
+        form.style.display = 'none'
+    }
+}
+
+// -------------Generating Genres Cards Start-------------
+const getGenres = async () => {
+    let response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?${apiKey}`)
+    let data = await response.json()
+    createGenreCards(data)
+    console.log(data)
+}
+
+function createGenreCards(genres) {
+    const genresContainer = document.querySelector('.genres')
+    genres.genres.forEach(genre => {
+        let genreContainer = document.createElement('div')
+        genreContainer.classList.add('genre')
+        genreContainer.innerHTML = `
+        <img src="./img/${genre.name}.svg" alt="">
+        <p>${genre.name}</p>
+        `
+        genresContainer.append(genreContainer)
+    })
+    const genreWidth = document.querySelector('.genre').offsetWidth
+
+    document.querySelector('.prev').addEventListener('click', () => {
+        const currentScroll = genresContainer.scrollLeft
+
+        if (currentScroll <= genreWidth) {
+            genresContainer.scrollLeft = genresContainer.scrollWidth - genresContainer.clientWidth
+        } else {
+            genresContainer.scrollBy({ left: -genreWidth, behavior: 'smooth' })
+        }
+    })
+
+    document.querySelector('.next').addEventListener('click', () => {
+        const currentScroll = genresContainer.scrollLeft
+        const maxScrollLeft = genresContainer.scrollWidth - genresContainer.clientWidth
+        if (currentScroll + genreWidth >= maxScrollLeft) {
+            genresContainer.scrollLeft = 0
+        } else {
+            genresContainer.scrollBy({ left: genreWidth, behavior: 'smooth' })
+        }
+    })
+
+    function autoScroll() {
+        const currentScroll = genresContainer.scrollLeft;
+        const maxScrollLeft = genresContainer.scrollWidth - genresContainer.clientWidth
+
+        if (currentScroll + genreWidth >= maxScrollLeft) {
+            genresContainer.scrollLeft = 0
+        } else {
+            genresContainer.scrollBy({ left: genreWidth, behavior: 'smooth' })
+        }
+    }
+
+    setInterval(() => {
+        autoScroll()
+    }, 2000)
+}
+
+getGenres()
+// -------------Generating Genres Cards End-------------
+
+// -------------Generating Genres Slider Start-------------
+
+// -------------Generating Genres Slider End-------------
 
 // -------------Generating Cards By Search Term Start-------------
 form.addEventListener('submit', (e) => {
@@ -36,6 +105,7 @@ getTrendingMovies()
 
 function createCards(data, container) {
     let section = document.querySelector(`.${container}`)
+    section.innerHTML = ''
     data.results.forEach(movie => {
         if (movie.title && movie.poster_path) {
             let movieFigure = document.createElement('figure')
@@ -55,7 +125,7 @@ function createCards(data, container) {
 function createModal(movie, container) {
     const modal = document.querySelector('.modal')
     const modalContent = document.querySelector('.modal-content')
-    
+
     container.onclick = () => {
         modal.style.display = 'block'
         getMovie(movie.id, modalContent)
@@ -101,26 +171,3 @@ function createMovieInfo(movie, container) {
 //     let data = await response.json()
 //     console.log(data)
 // }
-
-// -------------Generating Genres Cards Start-------------
-// const getGenres = async () => {
-//     let response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?${apiKey}`)
-//     let data = await response.json()
-//     createGenreCards(data)
-// }
-
-// function createGenreCards(genres) {
-//     let section = document.querySelector('.genres')
-//     genres.genres.forEach(genre => {
-//         let genreContainer = document.createElement('div')
-//         genreContainer.classList.add('genre')
-//         genreContainer.innerHTML = `
-//         <img src="https://placehold.co/40x40" alt="">
-//         <p>${genre.name}</p>
-//         `
-//         section.append(genreContainer)
-//     })
-// }
-
-// getGenres()
-// -------------Generating Genres Cards End-------------

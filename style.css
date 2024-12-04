@@ -1,34 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --lime-green: hsl(163, 72%, 41%);
+    --bright-red: hsl(356, 69%, 56%);
+
+    /* Light Theme */
+    --white-BG: hsl(0, 0%, 100%);
+    --very-Pale-Blue-Top-BG-Pattern: hsl(225, 100%, 98%);
+    --light-Grayish-Blue-Card-BG: hsl(227, 47%, 96%);
+    --dark-Grayish-Blue-Text: hsl(228, 12%, 44%);
+    --very-Dark-Blue-Text: hsl(230, 17%, 14%);
+    --toggle: hsl(230, 22%, 74%);
+
+    /* Dark Theme */
+    --very-Dark-Blue-BG: hsl(230, 17%, 14%);
+    --very-Dark-Blue-Top-BG-Pattern: hsl(232, 19%, 15%);
+    --dark-Desaturated-Blue-Card-BG: hsl(229, 27%, 24%);
+    --desaturated-Blue-Text: hsl(228, 34%, 66%);
+    --white-Text: hsl(0, 0%, 100%);
+    --toggle-dark: linear-gradient(to right, hsl(210, 78%, 56%), hsl(146, 68%, 55%));
+
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+body {
+    font-family: "Inter", sans-serif;
+    background-color: var(--white-BG);
+    color: var(--very-Dark-Blue-Text);
+}
+
 /* ------------------------HEADER------------------------ */
 header {
-    background-color: lightblue;
+    background-color: var(--very-Pale-Blue-Top-BG-Pattern);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
 }
 
-header form,
-form input {
-    background-color: lightgray;
-
+.menu {
+    background-color: var(--very-Dark-Blue-Top-BG-Pattern);
+    color: var(--white-Text);
+    border-radius: 5rem;
+    position: relative;
 }
 
 .menu ul {
-    list-style-type: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    list-style-type: none;
+    font-weight: 700;
+    font-size: 1rem;
 }
 
-.user {
+.menu ul li {
+    height: 100%;
+    padding: 1rem 1.8rem;
+    width: 100%;
+    color: var(--dark-Grayish-Blue-Text);
+    cursor: pointer;
+    transition: color 300ms ease;
+}
+
+.menu ul li:hover {
+    color: var(--white-Text);
+}
+
+.menu ul li:last-of-type {
     display: flex;
-    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--dark-Desaturated-Blue-Card-BG);
+    border-radius: 50%;
+    padding: 0.6rem;
+    margin-right: 5px;
+}
+
+.menu ul li svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 300ms ease;
+}
+
+.menu ul li:last-of-type:hover svg {
+    transform: scale(1.2);
+}
+
+.menu ul .active {
+    color: var(--white-Text);
+}
+
+.menu form {
+    background-color: red;
+    display: none;
+    align-items: center;
+    justify-content: start;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5rem;
+    padding-inline: 1.5rem;
+    background-color: var(--very-Dark-Blue-Top-BG-Pattern);
+}
+
+.menu form input {
+    outline: none;
+    border: none;
+    background-color: var(--very-Dark-Blue-Top-BG-Pattern);
+    width: 100%;
+    color: var(--white-Text);
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border: none;
+}
+
+.menu form input[type="submit"] {
+    display: none;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 700;
+}
+
+.slider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: var(--toggle);
+    width: 3.4rem;
+    height: 1.6rem;
+    border-radius: 1.2rem;
+}
+
+.slider::after {
+    content: '';
+    right: 4px;
+    position: absolute;
+    background-color: var(--white-BG);
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 100%;
+    transition: right 300ms ease-in-out;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]:checked~.slider::after {
+    right: calc(100% - 1.2rem - 4px);
+    background-color: var(--very-Dark-Blue-BG);
+}
+
+input[type="checkbox"]:checked~.slider {
+    background: var(--toggle-dark);
 }
 
 /* ------------------------MAIN------------------------ */
@@ -70,11 +209,13 @@ main {
 
 /* ------------------------Genres------------------------ */
 .genres {
+    width: 100%;
     display: flex;
     position: relative;
     background-color: wheat;
     gap: 0.5rem;
-    overflow: scroll;
+    overflow: auto;
+    scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     /* Hiding Scroll Bar */
     -ms-overflow-style: none;
@@ -86,15 +227,17 @@ main {
 }
 
 .genre {
-    width: 130px;
+    width: 200px;
     background-color: bisque;
     display: flex;
+    gap: 0.5rem;
     align-items: center;
     padding: 0.5rem 1rem;
-    scroll-snap-align: start;
+    scroll-snap-align: end;
 }
 
-.prev, .next {
+.prev,
+.next {
     height: 100%;
     display: flex;
     align-items: center;
