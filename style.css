@@ -71,7 +71,8 @@ main {
 /* ------------------------Genres------------------------ */
 .genres {
     display: flex;
-    background-color: red;
+    position: relative;
+    background-color: wheat;
     gap: 0.5rem;
     overflow: scroll;
     scroll-snap-type: x mandatory;
@@ -85,11 +86,32 @@ main {
 }
 
 .genre {
+    width: 130px;
     background-color: bisque;
     display: flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
+}
+
+.prev, .next {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    font-size: 2rem;
+    padding: 0.5rem;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.prev {
+    left: 0;
+}
+
+.next {
+    left: calc(100% - 2rem);
 }
 
 .genretrending {
@@ -102,8 +124,10 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    scrollbar-width: none;
 }
 
+/* ------------------------Movie Cards------------------------ */
 .card-container {
     display: flex;
     gap: 1rem;
@@ -111,7 +135,6 @@ main {
     scroll-snap-type: x mandatory;
     /* Hiding Scroll Bar */
     -ms-overflow-style: none;
-    scrollbar-width: none;
 }
 
 .card-container::-webkit-scrollbar {
@@ -125,4 +148,41 @@ main {
 .card img {
     max-width: 185px;
     min-height: 278px;
+}
+
+/* ------------------------Movie Cards------------------------ */
+/* ------------------------Modal------------------------ */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
