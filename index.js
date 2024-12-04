@@ -19,6 +19,8 @@ const getSearchingMovies = async (term) => {
 const getTrendingMovies = async () => {
     let response = await fetch(`https://api.themoviedb.org/3/trending/movie/day?${apiKey}&language=en-US'`)
     let data = await response.json()
+    console.log(data);
+
     createCards(data, 'trendingmovies')
 }
 
@@ -32,11 +34,32 @@ function createCards(data, container) {
         <figcaption>${movie.title}</figcaption>
         `
         section.append(movieFigure)
-    })
 
+        // ------MOVIE INFO------
+        getMovie(movie.id, section)
+    })
 }
 
 getTrendingMovies()
+// -------------Generating Movie Info-------------
+function createMovieInfo(movie, container) {
+    let infoContainer = document.createElement('article')
+    infoContainer.innerHTML = `
+    <img src="https://image.tmdb.org/t/p/w185/${movie.poster_path}" alt="">
+    <figcaption>${movie.title}</figcaption>
+    `
+    // container.append(infoContainer)
+    document.body.append(infoContainer)
+}
+
+const getMovie = async (movieId, container) => {
+    let response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?${apiKey}&language=en-US`)
+    let data = await response.json()
+    console.log(data)
+    createMovieInfo(data, container)
+}
+
+getMovie(1241982)
 // -------------Generating Trending Cards-------------
 
 const getPlayingMovies = async () => {
@@ -47,7 +70,7 @@ const getPlayingMovies = async () => {
 
 const getMoviesByGenre = async () => {
     let response = await fetch(`https://api.themoviedb.org/3/discover/movie?${apiKey}&include_adult=false&language=en-US&sort_by=release_date.desc&page=1&with_genres=35,53,27
-`)
+        `)
     let data = await response.json()
     console.log(data)
 }
