@@ -25,13 +25,15 @@ const getTrendingMovies = async () => {
 function createCards(data, container) {
     let section = document.querySelector(`.${container}`)
     data.results.forEach(movie => {
-        let movieFigure = document.createElement('figure')
-        movieFigure.classList.add('card')
-        movieFigure.innerHTML = `
+        if (movie.title && movie.poster_path) {
+            let movieFigure = document.createElement('figure')
+            movieFigure.classList.add('card')
+            movieFigure.innerHTML = `
         <img src="https://image.tmdb.org/t/p/w185/${movie.poster_path}" alt="">
         <figcaption>${movie.title}</figcaption>
         `
-        section.append(movieFigure)
+            section.append(movieFigure)
+        }
     })
 
 }

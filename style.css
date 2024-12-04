@@ -119,5 +119,10 @@ main {
 }
 
 .card {
-    scroll-snap-align: center;
+    scroll-snap-align: start;
+}
+
+.card img {
+    max-width: 185px;
+    min-height: 278px;
 }
