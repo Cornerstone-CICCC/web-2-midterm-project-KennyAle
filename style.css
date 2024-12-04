@@ -30,13 +30,12 @@
 
 body {
     font-family: "Inter", sans-serif;
-    background-color: var(--white-BG);
-    color: var(--very-Dark-Blue-Text);
+    background-color: rgb(132 155 168);
+    color: var(--white-Text);
 }
 
 /* ------------------------HEADER------------------------ */
 header {
-    background-color: var(--very-Pale-Blue-Top-BG-Pattern);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -209,11 +208,10 @@ main {
 
 /* ------------------------Genres------------------------ */
 .genres {
-    width: 100%;
     display: flex;
     position: relative;
-    background-color: wheat;
     gap: 0.5rem;
+    width: 100%;
     overflow: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
@@ -227,26 +225,53 @@ main {
 }
 
 .genre {
-    width: 200px;
-    background-color: bisque;
     display: flex;
-    gap: 0.5rem;
     align-items: center;
-    padding: 0.5rem 1rem;
-    scroll-snap-align: end;
+    justify-content: center;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--white-Text);
+    font-weight: 600;
+    padding: 1.5rem 2.3rem;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    scroll-snap-align: start;
+}
+
+.genre p {
+    text-wrap: nowrap;
+}
+
+.genre svg {
+    height: 30px;
+    width: 30px;
 }
 
 .prev,
 .next {
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: sticky;
-    font-size: 2rem;
-    padding: 0.5rem;
+    font-size: 1.5rem;
+    padding-inline: 0.5rem;
     z-index: 1;
+    color: var(--white-Text);
     cursor: pointer;
+    transition: background-color 300ms ease, opacity 300ms ease;
+    opacity: 0.4;
+}
+
+.genres:hover .prev{
+    border-radius: 1rem 0 0 1rem;
+    opacity: 1;
+}
+
+.genres:hover .next {
+    border-radius: 0 1rem 1rem 0;
+    opacity: 1;
 }
 
 .prev {
@@ -254,7 +279,7 @@ main {
 }
 
 .next {
-    left: calc(100% - 2rem);
+    left: calc(100% - 1.9rem);
 }
 
 .genretrending {

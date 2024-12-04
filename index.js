@@ -29,11 +29,14 @@ function createGenreCards(genres) {
     genres.genres.forEach(genre => {
         let genreContainer = document.createElement('div')
         genreContainer.classList.add('genre')
-        genreContainer.innerHTML = `
-        <img src="./img/${genre.name}.svg" alt="">
-        <p>${genre.name}</p>
-        `
+        genreContainer.innerHTML = `<p>${genre.name}</p>`
         genresContainer.append(genreContainer)
+        fetch(`./img/${genre.name}.svg`)
+        .then(res => res.ok && res.text())
+        .then(svg => {
+            genreContainer.innerHTML += svg || 'Error'
+        })
+
     })
     const genreWidth = document.querySelector('.genre').offsetWidth
 
