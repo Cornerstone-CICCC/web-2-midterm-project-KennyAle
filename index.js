@@ -31,10 +31,10 @@ function createGenreCards(genres) {
         genreContainer.innerHTML = `<p>${genre.name}</p>`
         genresContainer.append(genreContainer)
         fetch(`./img/${genre.name}.svg`)
-        .then(res => res.ok && res.text())
-        .then(svg => {
-            genreContainer.innerHTML += svg || 'Error'
-        })
+            .then(res => res.ok && res.text())
+            .then(svg => {
+                genreContainer.innerHTML += svg || 'Error'
+            })
 
     })
     const genreWidth = document.querySelector('.genre').offsetWidth
@@ -80,8 +80,12 @@ getGenres()
 // -------------Generating Cards By Search Term Start-------------
 form.addEventListener('submit', (e) => {
     e.preventDefault()
-    getSearchingMovies(search.value)
+    const query = search.value.trim().split(' ').join('+')
+    if (query) {
+        window.location.href = `results.html?query=${query}`
+    }
 })
+// getSearchingMovies(search.value)
 
 const getSearchingMovies = async (term) => {
     let query = term.split(' ').join('-')
