@@ -4,6 +4,51 @@ const searchBtn = document.querySelector('.search-btn')
 
 const apiKey = 'api_key=daf788f2ab38afabc8b5ea0ee12373da'
 
+document.addEventListener('DOMContentLoaded', () => {
+    contentGenerator()
+})
+// -------------Generating Content-------------
+function contentGenerator() {
+    getGenres()
+    getTrendingMovies()
+    getPlayingMovies()
+    getRatedMovies()
+    getUpcomingMovies()
+    getPopularMovies()
+}
+
+// -------------Generating Banner Start-------------
+const getPopularMovies = async () => {
+    let response = await fetch(`https://api.themoviedb.org/3/movie/popular?${apiKey}&language=en-US'`)
+    let data = await response.json()
+    console.log(data)
+    createBanner(data)
+}
+
+function createBanner(data) {
+    const heroBanner = document.querySelector('.herobanner')
+    heroBanner.innerHTML = `
+        <article class="heroleft">
+            <h2>${data.results[0].title}</h2>
+            <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[0].poster_path}" alt="">
+            <a href="#">
+                <img src="https://placehold.co/40x40" alt="">
+                See More
+            </a>
+            </article>
+            <article class="heroright">
+            <h2>${data.results[1].title}</h2>
+            <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[1].poster_path}" alt="">
+            <a href="#">
+                <img src="https://placehold.co/40x40" alt="">
+                See More
+            </a>
+        </article>
+    `
+
+}
+// -------------Generating Banner End-------------
+
 searchBtn.onclick = (e) => {
     e.stopPropagation()
     form.style.display = 'flex'
@@ -75,7 +120,7 @@ function createGenreCards(genres) {
     }, 2000)
 }
 
-getGenres()
+// getGenres()
 // -------------Generating Genres Cards End-------------
 // -------------Generating Cards By Search Term Start-------------
 form.addEventListener('submit', (e) => {
@@ -99,10 +144,10 @@ const getSearchingMovies = async (term) => {
 const getTrendingMovies = async () => {
     let response = await fetch(`https://api.themoviedb.org/3/trending/movie/day?${apiKey}&language=en-US'`)
     let data = await response.json()
-    console.log(data)
     createCards(data, 'trendingmovies')
 }
-getTrendingMovies()
+
+// getTrendingMovies()
 
 function createCards(data, container) {
     let section = document.querySelector(`.${container}`)
@@ -135,7 +180,7 @@ const getPlayingMovies = async () => {
     createCards(data, 'playing')
 }
 
-getPlayingMovies()
+// getPlayingMovies()
 // -------------Generating Playing Cards End-------------
 // -------------Generating Rated Cards Start-------------
 const getRatedMovies = async () => {
@@ -144,7 +189,7 @@ const getRatedMovies = async () => {
     createCards(data, 'rated')
 }
 
-getRatedMovies()
+// getRatedMovies()
 // -------------Generating Rated Cards End-------------
 // -------------Generating Rated Cards Start-------------
 const getUpcomingMovies = async () => {
@@ -153,7 +198,7 @@ const getUpcomingMovies = async () => {
     createCards(data, 'upcoming')
 }
 
-getUpcomingMovies()
+// getUpcomingMovies()
 // -------------Generating Rated Cards End-------------
 
 // -------------Generating Movie Info Start-------------
@@ -192,6 +237,8 @@ function createMovieInfo(movie, container) {
             container.innerHTML = ''
         }
     }
+    console.log(movie);
+    
 }
 // -------------Generating Movie Info End-------------
 
