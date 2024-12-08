@@ -120,7 +120,7 @@ function createBanner(data) {
             <div class="heropills">
             <a href="#">
             Watch More
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="white"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
             </a>
             </div>
             <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[1].backdrop_path}" alt="">
@@ -130,7 +130,7 @@ function createBanner(data) {
             <div class="heropillsr">
             <a href="#">
             Watch More
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="white"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
             </a>
             </div>
             <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[0].backdrop_path}" alt="">
@@ -146,19 +146,9 @@ function createBanner(data) {
                 let pill = document.createElement('div')
                 pill.classList.add('genrepill')
                 pill.innerHTML = `<p>${g.name}</p>`
-                fetch(`/img/${g.name.toLowerCase()}.svg`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`Failed to fetch ${g.name}.svg: ${res.status}`);
-                        }
-                        return res.text();
-                    })
-                    .then(svg => {
-                        pill.innerHTML += svg || 'Error loading SVG';
-                    })
-                    .catch(error => {
-                        pill.innerHTML += `Error: ${error.message}`;
-                    });
+                const img = document.createElement('img')
+                img.src = `./img/${g.name.toLowerCase()}.svg`
+                pill.appendChild(img)
                 heropills.append(pill)
             }
         })
@@ -169,19 +159,9 @@ function createBanner(data) {
                 let pill = document.createElement('div')
                 pill.classList.add('genrepill')
                 pill.innerHTML = `<p>${g.name}</p>`
-                fetch(`/img/${g.name}.svg`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`Failed to fetch ${g.name}.svg: ${res.status}`);
-                        }
-                        return res.text();
-                    })
-                    .then(svg => {
-                        pill.innerHTML += svg || 'Error loading SVG';
-                    })
-                    .catch(error => {
-                        pill.innerHTML += `Error: ${error.message}`;
-                    });
+                const img = document.createElement('img')
+                img.src = `./img/${g.name.toLowerCase()}.svg`
+                pill.appendChild(img)
                 heropillsr.append(pill)
             }
         })
@@ -222,13 +202,11 @@ function createGenreCards(genres) {
         let genreContainer = document.createElement('div')
         genreContainer.classList.add('genre')
         genreContainer.innerHTML = `<p>${genre.name}</p>`
+        let genreImg = document.createElement('img')
+        genreImg.src = `./img/${genre.name.toLowerCase()}.svg`
+        genreImg.alt = genre.name
+        genreContainer.append(genreImg)
         genresContainer.append(genreContainer)
-        fetch(`/img/${genre.name.toLowerCase()}.svg`)
-            .then(res => res.ok && res.text())
-            .then(svg => {
-                genreContainer.innerHTML += svg || 'Error'
-            })
-
     })
     const genreWidth = document.querySelector('.genre').offsetWidth
 
