@@ -31,23 +31,25 @@ toggle.addEventListener('click', () => {
 })
 
 seriesBtn.onclick = () => {
-    contentGenerator('tv', 'tv/airing_today', 'tv/on_the_air')
+    currentIndex = 1
     seriesBtn.classList.add('active')
     aboutBtn.classList.remove('active')
     moviesBtn.classList.remove('active')
     main.style.display = 'flex'
     about.style.display = 'none'
     about.innerHTML = ''
+    contentGenerator('tv', 'tv/airing_today', 'tv/on_the_air')
 }
 
 moviesBtn.onclick = () => {
-    contentGenerator('movie', 'movie/now_playing', 'movie/upcoming')
+    currentIndex = 1
     seriesBtn.classList.remove('active')
     aboutBtn.classList.remove('active')
     moviesBtn.classList.add('active')
     main.style.display = 'flex'
     about.style.display = 'none'
     about.innerHTML = ''
+    contentGenerator('movie', 'movie/now_playing', 'movie/upcoming')
 }
 
 aboutBtn.onclick = () => {
@@ -94,52 +96,64 @@ function contentGenerator(type, airing, upcoming) {
     getGenres(type)
     getTrendingMovies(type)
     getPlayingMovies(airing)
-    // getPlayingMovies('tv/airing_today')
     getRatedMovies(type)
     getUpcomingMovies(upcoming)
-    // getUpcomingMovies('tv/on_the_air')
     getPopularMovies(type)
+    // getUpcomingMovies('tv/on_the_air')
+    // getPlayingMovies('tv/airing_today')
 }
 
+
+let currentIndex = 1
+let bannerData = []
 // -------------Generating Banner Start-------------
 const getPopularMovies = async (type) => {
     let response = await fetch(`https://api.themoviedb.org/3/${type}/popular?${apiKey}&language=en-US&with_original_language=en`)
     let data = await response.json()
-    console.log(data)
-    createBanner(data)
-    createAbout(data)
+    if (data.results) {
+        bannerData = data;
+        createBanner(bannerData, currentIndex);
+        changeBanner(bannerData);
+        createAbout(data)
+    }
 }
 
-function createBanner(data) {
+function createBanner(data, index) {
+    console.log(bannerData);
+
     const heroBanner = document.querySelector('.herobanner')
+    heroBanner.innerHTML = ''
+    const movie = data.results[index]
+    const movie2 = data.results[(index + 1) % data.results.length]
+    const movie3 = data.results[(index + 2) % data.results.length]
     // <p>${data.results[1].overview}</p>
 
     heroBanner.innerHTML = `
         <article class="heroleft">
-            <h2 class="herotitle">${data.results[1].title || data.results[1].name}</h2>
+            <h2 class="herotitle">${movie.title || movie.name}</h2>
             <div class="heropills">
             <a href="#">
             Watch More
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="white"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
             </a>
             </div>
-            <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[1].backdrop_path}" alt="">
+            <img class="poster poster1" src="https://image.tmdb.org/t/p/w1280/${movie.backdrop_path}" alt="">
+            <img class="poster poster2" src="https://image.tmdb.org/t/p/w1280/${movie2.backdrop_path}" alt="">
             </article>
             <article class="heroright">
-            <h2 class="herotitle">${data.results[0].title || data.results[0].name}</h2>
+            <h2 class="herotitle">${movie2.title || movie2.name}</h2>
             <div class="heropillsr">
             <a href="#">
             Watch More
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="white"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
             </a>
             </div>
-            <img class="poster" src="https://image.tmdb.org/t/p/w1280/${data.results[0].backdrop_path}" alt="">
+            <img class="poster poster1" src="https://image.tmdb.org/t/p/w1280/${movie2.backdrop_path}" alt="">
+            <img class="poster poster2" src="https://image.tmdb.org/t/p/w1280/${movie3.backdrop_path}" alt="">
         </article>
     `
+    const genreArr = movie.genre_ids
     const heropills = document.querySelector('.heropills')
-    const heropillsr = document.querySelector('.heropillsr')
-    const genreArr = data.results[1].genre_ids
-    const genreArr2 = data.results[0].genre_ids
     genreArr.forEach(genre => {
         genresAll.forEach(g => {
             if (g.id == genre) {
@@ -152,7 +166,10 @@ function createBanner(data) {
                 heropills.append(pill)
             }
         })
-    });
+    })
+
+    const genreArr2 = movie2.genre_ids
+    const heropillsr = document.querySelector('.heropillsr')
     genreArr2.forEach(genre => {
         genresAll.forEach(g => {
             if (g.id == genre) {
@@ -167,6 +184,33 @@ function createBanner(data) {
         })
     });
 
+    const articles = heroBanner.querySelectorAll('article');
+    articles.forEach(article => {
+        article.classList.remove('active');
+    });
+
+    setTimeout(() => {
+        articles.forEach(article => {
+            article.classList.add('active');
+        });
+    }, 2300);
+
+}
+
+let bannerInterval
+
+function changeBanner() {
+    if (bannerData.length === 0) return
+    if (bannerInterval) {
+        clearInterval(bannerInterval)
+    }
+
+    createBanner(bannerData, currentIndex)
+
+    bannerInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % bannerData.results.length
+        createBanner(bannerData, currentIndex)
+    }, 3000)
 }
 // -------------Generating Banner End-------------
 
@@ -230,23 +274,23 @@ function createGenreCards(genres) {
         }
     })
 
-    let scrollInterval;
-    let lastInteractionTime = Date.now();
+    let scrollInterval
+    let lastInteractionTime = Date.now()
 
     function autoScroll() {
-        const currentScroll = genresContainer.scrollLeft;
-        const maxScrollLeft = genresContainer.scrollWidth - genresContainer.clientWidth;
+        const currentScroll = genresContainer.scrollLeft
+        const maxScrollLeft = genresContainer.scrollWidth - genresContainer.clientWidth
 
         if (currentScroll + genreWidth >= maxScrollLeft) {
             genresContainer.scrollLeft = 0;
         } else {
-            genresContainer.scrollBy({ left: genreWidth, behavior: 'smooth' });
+            genresContainer.scrollBy({ left: genreWidth, behavior: 'smooth' })
         }
     }
 
     function startAutoScroll() {
         if (!scrollInterval) {
-            scrollInterval = setInterval(autoScroll, 1000);
+            scrollInterval = setInterval(autoScroll, 750);
         }
     }
 
@@ -316,7 +360,6 @@ function createCards(data, container) {
             section.append(movieFigure)
             createModal('movie', movie, movieFigure)
         } else if (movie.name) {
-            console.log(movie.name);
 
             let movieFigure = document.createElement('figure')
             movieFigure.classList.add('card')

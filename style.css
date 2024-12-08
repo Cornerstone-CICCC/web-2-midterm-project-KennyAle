@@ -201,7 +201,35 @@ main {
     display: flex;
     gap: 1rem;
     padding-right: 1rem;
+    transition: opacity 1s ease-in-out;
+    overflow: hidden;
 }
+
+.poster1 {
+    transform: translateX(0%); 
+}
+
+.poster2 {
+    transform: translateX(100%); 
+}
+
+.herobanner article.active .poster2 {
+    transform: translateX(0%); 
+}
+
+.herobanner article.active .poster1 {
+    transform: translateX(-100%); 
+}
+
+.herobanner article .herotitle {
+    opacity: 1;
+    transition: opacity 280ms ease-in;
+}
+
+.herobanner article.active .herotitle {
+    opacity: 0;
+}
+
 
 .herobanner article {
     position: relative;
@@ -222,10 +250,9 @@ main {
     line-height: 1.5rem;
 }
 
-.herobanner article .herotitle {
+.herobanner .herotitle {
     z-index: 1;
     margin-bottom: auto;
-    opacity: 1;
     padding: 2rem;
     font-size: 3rem;
 }
@@ -275,7 +302,6 @@ main {
     opacity: 1;
 }
 
-.herobanner article h2,
 .herobanner article p,
 .herobanner article .genrepill {
     opacity: 0;
@@ -283,16 +309,15 @@ main {
     transition: opacity 300ms ease-in;
 }
 
-.herobanner article:hover h2,
 .herobanner article:hover p,
 .herobanner article:hover .genrepill {
     opacity: 1;
     z-index: 1;
 }
 
-.herobanner article:hover .poster {
+/* .herobanner article:hover .poster {
     transform: scale(1.02);
-}
+} */
 
 .bannerinfo {
     display: flex;
