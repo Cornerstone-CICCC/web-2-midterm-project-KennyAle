@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-    --lime-green: hsl(163, 72%, 41%);
-    --bright-red: hsl(356, 69%, 56%);
-
     /* Light Theme */
     --white-BG: hsl(0, 0%, 100%);
     --very-Pale-Blue-Top-BG-Pattern: hsl(225, 100%, 98%);
@@ -19,7 +16,6 @@
     --desaturated-Blue-Text: hsl(228, 34%, 66%);
     --white-Text: hsl(0, 0%, 100%);
     --toggle-dark: linear-gradient(to right, hsl(210, 78%, 56%), hsl(146, 68%, 55%));
-
 }
 
 * {
@@ -32,6 +28,18 @@ body {
     font-family: "Inter", sans-serif;
     background-color: rgb(132 155 168);
     color: var(--white-Text);
+    background: radial-gradient(circle at top center,
+            rgb(132, 155, 168),
+            rgb(76, 99, 112) 50%,
+            rgb(44, 59, 68));
+    min-height: 100vh;
+}
+
+.dark-theme {
+    background: radial-gradient(circle at top center,
+            hsl(232, 22%, 10%),
+            hsl(229, 30%, 15%) 50%,
+            hsl(230, 20%, 8%) 100%);
 }
 
 a {
@@ -71,6 +79,10 @@ header {
     color: var(--dark-Grayish-Blue-Text);
     cursor: pointer;
     transition: color 300ms ease;
+}
+
+.menu ul li a {
+    color: var(--dark-Grayish-Blue-Text);
 }
 
 .menu ul li:hover {
@@ -180,28 +192,45 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    padding-inline: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 2rem;
 }
 
 /* ------------------------HEROBANNER------------------------ */
 .herobanner {
     display: flex;
     gap: 1rem;
-    height: 200px;
+    padding-right: 1rem;
 }
 
 .herobanner article {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: end;
     background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
+    border-radius: 1.8rem;
     overflow: hidden;
+    aspect-ratio: 1/0.5;
+    text-wrap: pretty;
+    box-shadow: 0px 0px 80px 20px rgba(0, 0, 0, 0.2);
 }
 
-.herobanner article > * {
+.herobanner article p {
+    max-width: 600px;
+    margin-right: auto;
+    line-height: 1.5rem;
+}
+
+.herobanner article .herotitle {
     z-index: 1;
+    margin-bottom: auto;
+    opacity: 1;
+    padding: 2rem;
+    font-size: 3rem;
+}
+
+.herobanner article>*:not(img) {
     padding: 1rem;
 }
 
@@ -213,13 +242,60 @@ main {
     object-position: top;
     z-index: 0;
     padding: 0;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+    background-color: black;
+    transition: transform 500ms ease-in-out;
 }
 
-.herobanner article a {
+.herobanner article::after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
+    transition: opacity 500ms ease-in-out;
+}
+
+.herobanner article::before {
+    opacity: 1;
+    z-index: 1;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
+    transition: opacity 500ms ease-in-out;
+}
+
+.herobanner article:hover::after {
+    opacity: 1;
+}
+
+.herobanner article h2,
+.herobanner article p,
+.herobanner article .genrepill {
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.herobanner article:hover h2,
+.herobanner article:hover p,
+.herobanner article:hover .genrepill {
+    opacity: 1;
+    z-index: 1;
+}
+
+.herobanner article:hover .poster {
+    transform: scale(1.02);
+}
+
+.bannerinfo {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .heroleft {
@@ -228,6 +304,48 @@ main {
 
 .heroright {
     flex: 2;
+}
+
+.herobanner article a {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    order: 10;
+    gap: 0.3rem;
+    opacity: 1;
+    z-index: 1;
+    font-size: 1rem;
+    background-color: rgba(30, 32, 42, 0.7);
+    color: var(--white-Text);
+    font-weight: 600;
+    padding: 0.8rem 0.8rem;
+    border-radius: 1rem;
+}
+
+.heropills,
+.heropillsr {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.genrepill {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--white-Text);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 1.2rem;
+}
+
+.genrepill svg,
+.herobanner a svg {
+    width: 20px;
 }
 
 /* ------------------------Genres------------------------ */
@@ -255,7 +373,7 @@ main {
     flex-direction: row-reverse;
     gap: 0.5rem;
     width: 300px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     color: var(--white-Text);
     font-weight: 600;
     padding: 1.5rem 2.3rem;
@@ -288,7 +406,7 @@ main {
     opacity: 0.4;
 }
 
-.genres:hover .prev{
+.genres:hover .prev {
     border-radius: 1rem 0 0 1rem;
     opacity: 1;
 }
@@ -342,8 +460,9 @@ main {
 
 .card img {
     cursor: pointer;
-    max-width: 185px;
-    min-height: 278px;
+    width: 185px;
+    height: 278px;
+    /* max-height: 278px; */
     border-radius: 1rem;
 }
 
@@ -353,8 +472,11 @@ main {
 }
 
 .card figcaption {
+    width: 180px;
     text-wrap: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .stats {
@@ -364,7 +486,7 @@ main {
     font-weight: normal;
 }
 
-.stats > * {
+.stats>* {
     padding-inline: 1rem;
 }
 
@@ -410,4 +532,252 @@ main {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* -------------About Page -------------*/
+.about {
+    display: none;
+    padding: 4rem 2rem;
+}
+
+.about-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    flex: 1;
+    max-width: 90%;
+}
+
+.about-text h1 {
+    width: 100%;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-text p {
+    width: 100%;
+    text-wrap: pretty;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+    grid-auto-rows: minmax(140px, auto);
+    width: 100%;
+    flex: 2;
+    transform-origin: center;
+}
+
+@keyframes moveUpDown {
+    0% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+.about-grid img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    /* animation: moveUpDown 8s ease-in-out infinite; */
+    object-fit: cover;
+    transition: transform 150ms ease-out;
+}
+
+.about-grid img:nth-child(odd) {
+    animation-delay: 0s;
+    transform: translateY(-10px);
+}
+
+.about-grid img:nth-child(even) {
+    animation-delay: 4s;
+    transform: translateY(10px);
+}
+
+.about-grid img:nth-child(odd):hover {
+    animation-delay: 0s;
+    transform: translateY(-10px) scale(1.05);
+}
+
+.about-grid img:nth-child(even):hover {
+    animation-delay: 4s;
+    transform: translateY(10px) scale(1.05);
+}
+
+/* ---------Results Page--------- */
+.section-container-results {
+    width: 100%;
+}
+
+.section-container-results article {
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.search-results {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+}
+
+.loading {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* ---------Footer Styles--------- */
+footer {
+    color: #fff;
+    padding: 2rem 0;
+    text-align: center;
+    font-size: 0.8rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.footer-links {
+    margin-top: 1rem;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #f39c12;
+}
+
+.footer-links a:focus {
+    outline: none;
+    color: #f39c12;
+}
+
+@media (max-width: 1024px) {
+    .genrepill {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .herobanner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .herobanner article a {
+        font-size: 1rem;
+    }
+
+    .about {
+        padding: 1rem;
+    }
+
+    .about-container {
+        flex-direction: column;
+    }
+
+    .about-text {
+        margin: auto;
+    }
+
+    .about-text h1 {
+        text-align: center;
+    }
+
+    .about-grid {
+        grid-template-columns: repeat(4, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 580px) {
+    header {
+        padding: 0.5rem;
+    }
+
+    header a svg {
+        width: 35px;
+    }
+
+    .menu ul li {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .menu ul li:last-of-type {
+        margin-right: 0;
+    }
+
+    .menu ul li svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .slider {
+        width: 2.5rem;
+    }
+
+    .herobanner article a {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .herobanner article a svg {
+        width: 12px;
+    }
+
+    .herobanner article .herotitle {
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+
+    .about-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+    }
+
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links a {
+        margin: 10px 0;
+    }
 }
