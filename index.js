@@ -146,7 +146,7 @@ function createBanner(data) {
                 let pill = document.createElement('div')
                 pill.classList.add('genrepill')
                 pill.innerHTML = `<p>${g.name}</p>`
-                fetch(`/img/${g.name}.svg`)
+                fetch(`/img/${g.name.toLowerCase()}.svg`)
                     .then(res => {
                         if (!res.ok) {
                             throw new Error(`Failed to fetch ${g.name}.svg: ${res.status}`);
@@ -223,7 +223,7 @@ function createGenreCards(genres) {
         genreContainer.classList.add('genre')
         genreContainer.innerHTML = `<p>${genre.name}</p>`
         genresContainer.append(genreContainer)
-        fetch(`/img/${genre.name}.svg`)
+        fetch(`/img/${genre.name.toLowerCase()}.svg`)
             .then(res => res.ok && res.text())
             .then(svg => {
                 genreContainer.innerHTML += svg || 'Error'
