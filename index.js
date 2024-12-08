@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const getTheme = localStorage.getItem('theme')
     if (getTheme == 'dark') {
         document.body.classList.add(getTheme + '-theme')
-        if(getTheme == 'dark') {
+        if (getTheme == 'dark') {
             toggle.checked = true
         }
-    } 
+    }
 })
 
 toggle.addEventListener('click', () => {
@@ -147,11 +147,19 @@ function createBanner(data) {
                 pill.classList.add('genrepill')
                 pill.innerHTML = `<p>${g.name}</p>`
                 fetch(`/img/${g.name}.svg`)
-                    .then(res => res.ok && res.text())
-                    .then(svg => {
-                        pill.innerHTML += svg || 'Error'
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`Failed to fetch ${g.name}.svg: ${res.status}`);
+                        }
+                        return res.text();
                     })
-                    heropills.append(pill)
+                    .then(svg => {
+                        pill.innerHTML += svg || 'Error loading SVG';
+                    })
+                    .catch(error => {
+                        pill.innerHTML += `Error: ${error.message}`;
+                    });
+                heropills.append(pill)
             }
         })
     });
@@ -161,12 +169,20 @@ function createBanner(data) {
                 let pill = document.createElement('div')
                 pill.classList.add('genrepill')
                 pill.innerHTML = `<p>${g.name}</p>`
-                fetch(`./img/${g.name}.svg`)
-                    .then(res => res.ok && res.text())
-                    .then(svg => {
-                        pill.innerHTML += svg || 'Error'
+                fetch(`/img/${g.name}.svg`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`Failed to fetch ${g.name}.svg: ${res.status}`);
+                        }
+                        return res.text();
                     })
-                    heropillsr.append(pill)
+                    .then(svg => {
+                        pill.innerHTML += svg || 'Error loading SVG';
+                    })
+                    .catch(error => {
+                        pill.innerHTML += `Error: ${error.message}`;
+                    });
+                heropillsr.append(pill)
             }
         })
     });
@@ -323,7 +339,7 @@ function createCards(data, container) {
             createModal('movie', movie, movieFigure)
         } else if (movie.name) {
             console.log(movie.name);
-            
+
             let movieFigure = document.createElement('figure')
             movieFigure.classList.add('card')
             movieFigure.innerHTML = `
