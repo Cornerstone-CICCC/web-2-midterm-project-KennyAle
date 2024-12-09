@@ -119,8 +119,6 @@ const getPopularMovies = async (type) => {
 }
 
 function createBanner(data, index) {
-    console.log(bannerData);
-
     const heroBanner = document.querySelector('.herobanner')
     heroBanner.innerHTML = ''
     const movie = data.results[index]
@@ -357,6 +355,9 @@ function createCards(data, container) {
                     <p>${movie.release_date}</p>
                 </div>
             `
+            // movieFigure.addEventListener('click', () => {
+            //     window.open(`details.html?movieId=${movie.id}`, '_blank');
+            // })
             section.append(movieFigure)
             createModal('movie', movie, movieFigure)
         } else if (movie.name) {
@@ -374,6 +375,9 @@ function createCards(data, container) {
                     <p>${movie.first_air_date}</p>
                 </div>
             `
+            // movieFigure.addEventListener('click', () => {
+            //     window.open(`details.html?serieId=${movie.id}`, '_blank');
+            // })
             section.append(movieFigure)
             createModal('tv', movie, movieFigure)
         }
@@ -412,24 +416,40 @@ function createModal(type, movie, container) {
     const modalContent = document.querySelector('.modal-content')
 
     container.onclick = () => {
-        modal.style.display = 'block'
+        modal.style.display = 'flex'
         getMovie(type, movie.id, modalContent)
     }
 }
 
 const getMovie = async (type, movieId, container) => {
-    let response = await fetch(`https://api.themoviedb.org/3/${type}/${movieId}?${apiKey}&language=en-US`)
-    let data = await response.json()
-    console.log(data.tagline)
-    createMovieInfo(data, container)
+    let movieResponse = await fetch(`https://api.themoviedb.org/3/${type}/${movieId}?${apiKey}&language=en-US`)
+    let movieData = await movieResponse.json()
+    console.log(movieData.tagline)
+    const videoResponse = await fetch(`https://api.themoviedb.org/3/${type}/${movieId}/videos?${apiKey}&language=en-US`)
+    const videoData = await videoResponse.json()
+
+    const trailer = videoData.results.find(video => video.type === 'Trailer' && video.site === 'YouTube')
+    createMovieInfo(movieData, container, trailer)
 }
 
-function createMovieInfo(movie, container) {
+function createMovieInfo(movie, container, trailer) {
     container.innerHTML += `
     <span class="close">&times;</span>
-    <img src="https://image.tmdb.org/t/p/w185/${movie.poster_path}" alt="">
-    <figcaption>${movie.title}</figcaption>
-    `
+    <div class="modal-header">
+        <img class="modal-poster" src="https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="${movie.title || movie.name}">
+        <div class="modal-header-info">
+            <h2>${movie.title || movie.name}</h2>
+            <p><strong>Release Date:</strong> ${movie.release_date || movie.first_air_date || 'N/A'}</p>
+            <p><strong>Tagline:</strong> ${movie.tagline || 'N/A'}</p>
+        </div>
+    </div>
+    <div class="modal-body">
+        <p><strong>Overview:</strong> ${movie.overview || 'No description available.'}</p>
+        <p><strong>Genres:</strong> ${movie.genres?.map(genre => genre.name).join(', ') || 'N/A'}</p>
+        <p><strong>Rating:</strong> ⭐${movie.vote_average || 'N/A'} (${movie.vote_count || 0} votes)</p>
+        ${trailer ? `<iframe width="100%" height="315" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>` : '<p>No trailer available.</p>'}
+    </div>
+`;
     const modal = document.querySelector('.modal')
     const closeBtn = document.querySelector('.close')
     closeBtn.onclick = () => {
