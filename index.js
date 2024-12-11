@@ -355,9 +355,9 @@ function createCards(data, container) {
                     <p>${movie.release_date}</p>
                 </div>
             `
-            // movieFigure.addEventListener('click', () => {
-            //     window.open(`details.html?movieId=${movie.id}`, '_blank');
-            // })
+            movieFigure.addEventListener('click', () => {
+                window.open(`details.html?movieId=${movie.id}`, '_blank');
+            })
             section.append(movieFigure)
             createModal('movie', movie, movieFigure)
         } else if (movie.name) {
@@ -375,9 +375,9 @@ function createCards(data, container) {
                     <p>${movie.first_air_date}</p>
                 </div>
             `
-            // movieFigure.addEventListener('click', () => {
-            //     window.open(`details.html?serieId=${movie.id}`, '_blank');
-            // })
+            movieFigure.addEventListener('click', () => {
+                window.open(`details.html?serieId=${movie.id}`, '_blank');
+            })
             section.append(movieFigure)
             createModal('tv', movie, movieFigure)
         }
